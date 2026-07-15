@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat Assistant</title>
+    <title>L'Oréal Beauty Advisor</title>
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
@@ -19,12 +19,21 @@
     <div class="page-wrapper">
       <!------- Header / Branding ------->
       <header class="site-header">
-        <h1 class="site-title">Smart Product Advisor</h1>
+        <p class="brand-label">L'ORÉAL</p>
+        <h1 class="site-title">Beauty Advisor</h1>
+        <p class="site-subtitle">
+          Ask about products, routines, and skincare recommendations.
+        </p>
       </header>
 
       <!------- Chat Area ------->
       <main>
         <section class="chatbox">
+          <div id="latestQuestionCard" class="latest-question-card hidden">
+            <div class="latest-question-label">Latest question</div>
+            <p id="latestQuestion" class="latest-question-text"></p>
+          </div>
+
           <div id="chatWindow" class="chat-window">
             <!-- messages will be appended here via JS -->
           </div>
