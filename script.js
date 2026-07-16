@@ -8,6 +8,15 @@ const latestQuestionText = document.getElementById("latestQuestion");
 // Replace this URL with your deployed Cloudflare Worker URL
 const workerUrl = "https://lorealbot.travistu8.workers.dev/";
 
+// Initilize a array to store history of messages the user has asked the bot. This will be used to send the entire conversation to the bot for context.
+const messages = [
+  {
+    role: "system",
+    content:
+      "You are a L'Oréal assistant that provides only information and only answers questions about L'Oréal products, services, and routines.",
+  },
+];
+
 function appendMessage(text, sender) {
   const messageDiv = document.createElement("div");
   messageDiv.className = `chat-message ${sender}`;
@@ -33,8 +42,10 @@ chatForm.addEventListener("submit", async (e) => {
   const question = userInput.value.trim();
   if (!question) return;
 
-  // Reset the conversation display for each new question
-  chatWindow.innerHTML = "";
+  // Add the user's question to the messages array for context
+  messages.push({ role: "user", content: question });
+
+  // Keep the existing chat visible and show the latest question above it
   latestQuestionCard.classList.remove("hidden");
   latestQuestionText.textContent = question;
 
@@ -54,14 +65,7 @@ chatForm.addEventListener("submit", async (e) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a L'Oréal assistant that provides only information and only answers questions about L'Oréal products, services, and routines.",
-          },
-          { role: "user", content: question },
-        ],
+        messages: messages,
       }),
     });
 
@@ -69,6 +73,9 @@ chatForm.addEventListener("submit", async (e) => {
     const reply =
       data?.choices?.[0]?.message?.content ||
       "Sorry, I couldn't get a reply from the bot.";
+
+    // Add the bot's reply to the messages array for context
+    messages.push({ role: "assistant", content: reply });
 
     loadingMessage.remove();
     appendMessage(reply, "assistant");
